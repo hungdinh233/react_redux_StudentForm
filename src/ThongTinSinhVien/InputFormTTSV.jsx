@@ -4,13 +4,13 @@ import { connect } from "react-redux";
 class InputFormTTSV extends Component {
   getInfo = (e) => {
     let { id, value } = e.target;
-    let dataType = e.target.getAttribute("data-type")
+    let dataType = e.target.getAttribute("data-type");
     const action = {
       type: "HANDLE_INPUT",
       payload: {
         id: id,
         value: value,
-        dataType: dataType
+        dataType: dataType,
       },
     };
     this.props.dispatch(action);
@@ -18,12 +18,23 @@ class InputFormTTSV extends Component {
   createStudent = (e) => {
     e.preventDefault();
     const action = {
-      type: "HANDLE_SUBMIT",
+      type: "HANDLE_CREATE",
+    };
+    this.props.dispatch(action);
+  };
+  updateSubmit = (e) => {
+    e.preventDefault();
+    let { sinhVien } = this.props;
+    const action = {
+      type: "HANDLE_UPDATE_SUBMIT",
+      payload: {
+        masinhvien: sinhVien.maSV,
+      },
     };
     this.props.dispatch(action);
   };
   render() {
-    let { err } = this.props;
+    let { err, sinhVien } = this.props;
     return (
       <div className="container">
         <div className="card">
@@ -38,8 +49,9 @@ class InputFormTTSV extends Component {
                   type="text"
                   name=""
                   id="maSV"
-                  data-type = "id"
+                  data-type="id"
                   className="form-control"
+                  value={sinhVien.maSV}
                   onChange={this.getInfo}
                 />
                 <span className="text-danger" style={{ fontSize: 14 }}>
@@ -52,8 +64,9 @@ class InputFormTTSV extends Component {
                   type="text"
                   name=""
                   id="tenSV"
-                  data-type = "name"
+                  data-type="name"
                   className="form-control"
+                  value={sinhVien.tenSV}
                   onChange={this.getInfo}
                 />
                 <span className="text-danger" style={{ fontSize: 14 }}>
@@ -68,8 +81,9 @@ class InputFormTTSV extends Component {
                   type="number"
                   name=""
                   id="soDienThoai"
-                  data-type = "tel"
+                  data-type="tel"
                   className="form-control"
+                  value={sinhVien.soDienThoai}
                   onChange={this.getInfo}
                 />
                 <span className="text-danger" style={{ fontSize: 14 }}>
@@ -82,8 +96,9 @@ class InputFormTTSV extends Component {
                   type="text"
                   name=""
                   id="email"
-                  data-type ="email"
+                  data-type="email"
                   className="form-control"
+                  value={sinhVien.email}
                   onChange={this.getInfo}
                 />
                 <span className="text-danger" style={{ fontSize: 14 }}>
@@ -97,8 +112,18 @@ class InputFormTTSV extends Component {
               className="btn btn-success my-2"
               type="submit"
               onClick={this.createStudent}
+              id="create_btn"
             >
               Thêm sinh viên
+            </button>
+            <button
+              className="btn btn-warning my-2"
+              type="submit"
+              onClick={this.updateSubmit}
+              id="update_btn"
+              style={{ display: "none" }}
+            >
+              Xác nhận cập nhật
             </button>
           </div>
         </div>
@@ -109,6 +134,7 @@ class InputFormTTSV extends Component {
 
 const mapStateToProps = (state) => ({
   err: state.ttSinhVienReducer.validErr,
+  sinhVien: state.ttSinhVienReducer.sinhVien,
 });
 
 export default connect(mapStateToProps)(InputFormTTSV);

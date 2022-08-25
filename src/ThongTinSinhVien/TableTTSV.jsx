@@ -18,6 +18,7 @@ class TableTTSV extends Component {
                 const action = {
                   type: "HANDLE_DELETE",
                   payload: {
+                    sinhvien: sinhvien,
                     masinhvien: sinhvien.maSV,
                   },
                 };
@@ -26,7 +27,25 @@ class TableTTSV extends Component {
             >
               Xóa
             </button>
-            <button className="btn btn-primary">Sửa</button>
+            <button
+              className="btn btn-primary"
+              onClick={() => {
+                //disable để không sửa được mã sinh viên
+                document.getElementById("maSV").disabled = true;
+                document.getElementById("create_btn").style.display = "none";
+                document.getElementById("update_btn").style.display = "block";
+                const action = {
+                  type: "HANDLE_UPDATE_RENDER",
+                  payload: {
+                    sinhvien: sinhvien,
+                    masinhvien: sinhvien.maSV,
+                  },
+                };
+                this.props.dispatch(action);
+              }}
+            >
+              Sửa
+            </button>
           </td>
         </tr>
       );
