@@ -1,12 +1,12 @@
 const defaultState = {
-  inpArr: {
+  sinhVien: {
     maSV: "",
     tenSV: "",
     soDienThoai: "",
     email: "",
   },
 
-  tableList: [
+  danhSachSinhVien: [
     {
       maSV: "2",
       tenSV: "Nguyen K",
@@ -26,7 +26,11 @@ export const ttSinhVienReducer = (state = defaultState, action) => {
   switch (action.type) {
     case "INPUT_RECIVER": {
       let { id, value } = action.payload;
-      
+      let inpSinhVien = { ...state.sinhVien };
+      inpSinhVien[id] = value;
+      state.sinhVien = inpSinhVien;
+      console.log("sinhVien",state.sinhVien);
+      return { ...state };
     }
     default:
       return state;

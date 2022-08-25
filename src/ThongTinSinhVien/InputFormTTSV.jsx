@@ -13,6 +13,9 @@ class InputFormTTSV extends Component {
     };
     this.props.dispatch(action);
   };
+  createStudent = () => {
+    
+  };
   render() {
     return (
       <div className="container">
@@ -67,7 +70,12 @@ class InputFormTTSV extends Component {
             </div>
           </div>
           <div className="card-footer bg-default">
-            <button className="btn btn-success my-2">Thêm sinh viên</button>
+            <button
+              className="btn btn-success my-2"
+              onClick={this.createStudent}
+            >
+              Thêm sinh viên
+            </button>
           </div>
         </div>
       </div>

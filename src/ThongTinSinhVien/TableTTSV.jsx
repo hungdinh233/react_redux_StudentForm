@@ -42,7 +42,7 @@ class TableTTSV extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  ttSinhVien: state.ttSinhVienReducer.tableList,
+  ttSinhVien: state.ttSinhVienReducer.danhSachSinhVien,
 });
 
 export default connect(mapStateToProps)(TableTTSV);
