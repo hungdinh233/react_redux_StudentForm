@@ -13,8 +13,12 @@ class InputFormTTSV extends Component {
     };
     this.props.dispatch(action);
   };
-  createStudent = () => {
-    
+  createStudent = (e) => {
+    e.preventDefault();
+    const action = {
+      type: "HANDLE_SUBMIT",
+    };
+    this.props.dispatch(action);
   };
   render() {
     return (
@@ -72,6 +76,7 @@ class InputFormTTSV extends Component {
           <div className="card-footer bg-default">
             <button
               className="btn btn-success my-2"
+              type="submit"
               onClick={this.createStudent}
             >
               Thêm sinh viên

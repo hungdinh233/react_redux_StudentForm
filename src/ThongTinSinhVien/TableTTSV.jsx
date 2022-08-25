@@ -12,7 +12,20 @@ class TableTTSV extends Component {
           <td>{sinhvien.soDienThoai}</td>
           <td>{sinhvien.email}</td>
           <td>
-            <button className="btn btn-danger mx-2">Xóa</button>
+            <button
+              className="btn btn-danger mx-2"
+              onClick={() => {
+                const action = {
+                  type: "HANDLE_DELETE",
+                  payload: {
+                    masinhvien: sinhvien.maSV,
+                  },
+                };
+                this.props.dispatch(action);
+              }}
+            >
+              Xóa
+            </button>
             <button className="btn btn-primary">Sửa</button>
           </td>
         </tr>
