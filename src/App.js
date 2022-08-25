@@ -1,12 +1,12 @@
 import { Provider } from "react-redux";
 import { store } from "./Redux/configStore";
-import GiaoDien from "./ThongTinSinhVien/GiaoDien";
+import GiaoDienTTSV from "./ThongTinSinhVien/GiaoDienTTSV";
 
 function App() {
   return (
     <div className="App">
       <Provider store={store}>
-        <GiaoDien />
+        <GiaoDienTTSV/>
       </Provider>
     </div>
   );
