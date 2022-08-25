@@ -32,10 +32,11 @@ export const ttSinhVienReducer = (state = defaultState, action) => {
   switch (action.type) {
     case "HANDLE_INPUT": {
       let { id, value, dataType } = action.payload;
-      console.log(id, value)
+      console.log(id, value);
       let inpSinhVien = { ...state.sinhVien };
       inpSinhVien[id] = value;
       state.sinhVien = inpSinhVien;
+    //   console.log("asdsd", state.sinhVien);
       //------Thông báo tính đầy đủ khi điền Input------
       let validError = { ...state.validErr };
       let errMess = "";
@@ -43,6 +44,10 @@ export const ttSinhVienReducer = (state = defaultState, action) => {
         errMess = "Không để trống phần thông tin này!";
       } else {
         if (dataType === "id") {
+          //xét sinh viên có mã sv đã tồn tại
+          if (state.danhSachSinhVien.find((sv) => sv.maSV === value)) {
+            errMess = "Mã sinh viên đã tồn tại!";
+          }
           let regexNumberId = /^[0-9]*$/;
           if (!regexNumberId.test(value)) {
             errMess = "Mã sinh viên phải là số!";
@@ -75,16 +80,18 @@ export const ttSinhVienReducer = (state = defaultState, action) => {
       //-----------------
       return { ...state };
     }
-    case "HANDLE_SUBMIT": {
+    case "HANDLE_CREATE": {
       //------Kiểm tra tính đầy đủ khi submit và Xử lý validation------
       let valid = true;
       let baoLoi = { ...state.validErr };
+      //xử lý gắn trạng thái false khi validErr có lỗi của người dùng
       for (let key in baoLoi) {
         if (baoLoi[key] !== "") {
           valid = false;
           break;
         }
       }
+      // xử lý gắn trạng thái false cho input tại from người dùng điền sót
       for (let key in state.sinhVien) {
         if (state.sinhVien[key] === "") {
           baoLoi[key] = "Không để trống phần thông tin này!";
@@ -92,6 +99,7 @@ export const ttSinhVienReducer = (state = defaultState, action) => {
           //   break;
         }
       }
+      //chặn submit khi trạng thái false xuất hiện
       if (!valid) {
         console.log("err", baoLoi);
         state.validErr = baoLoi;
@@ -99,9 +107,10 @@ export const ttSinhVienReducer = (state = defaultState, action) => {
         return { ...state };
       }
       //-------------------------------------------------
-      let danhSachSinhVienUpdate = [...state.danhSachSinhVien];
-      danhSachSinhVienUpdate.push(state.sinhVien);
-      state.danhSachSinhVien = danhSachSinhVienUpdate;
+      //xử lý update vào state ở dưới nếu đặt lên trên là lỗi nhé!
+      let danhSachUpdate = [...state.danhSachSinhVien];
+      danhSachUpdate.push(state.sinhVien);
+      state.danhSachSinhVien = danhSachUpdate;
       console.log(valid);
       alert("Thêm sinh viên thành công!");
       return { ...state };
@@ -114,6 +123,24 @@ export const ttSinhVienReducer = (state = defaultState, action) => {
       );
       danhSachSinhVienUpdate.splice(sinhVienIndex, 1);
       state.danhSachSinhVien = danhSachSinhVienUpdate;
+      return { ...state };
+    }
+    case "HANDLE_UPDATE_RENDER": {
+      let { sinhvien } = action.payload;
+      state.sinhVien = sinhvien;
+      console.log(state.sinhVien);
+      return { ...state };
+    }
+    case "HANDLE_UPDATE_SUBMIT": {
+      //   console.log("sinhvien", state.sinhVien);
+      let updateDanhSachSV = [...state.danhSachSinhVien];
+      let svIndex = updateDanhSachSV.findIndex(
+        (sv) => sv.maSV === state.sinhVien.maSV
+      );
+      //   console.log("svcn", svIndex);
+      updateDanhSachSV[svIndex] = state.sinhVien;
+      state.danhSachSinhVien = updateDanhSachSV;
+      alert ("Cập nhật thành công!")
       return { ...state };
     }
     default:
