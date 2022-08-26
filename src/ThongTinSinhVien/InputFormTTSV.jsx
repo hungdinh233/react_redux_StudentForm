@@ -28,16 +28,20 @@ class InputFormTTSV extends Component {
     const action = {
       type: "HANDLE_UPDATE_SUBMIT",
       payload: {
+        sinhVien: sinhVien,
         masinhvien: sinhVien.maSV,
       },
     };
     this.props.dispatch(action);
+    document.getElementById("maSV").disabled = false;
+    document.getElementById("update_btn").style.display = "none";
+    document.getElementById("create_btn").style.display = "block"
   };
   render() {
     let { err, sinhVien } = this.props;
     return (
       <div className="container">
-        <div className="card">
+        <form className="card" onSubmit={this.createStudent}>
           <div className="card-header bg-dark text-white">
             <h2>Thông tin sinh viên</h2>
           </div>
@@ -126,7 +130,7 @@ class InputFormTTSV extends Component {
               Xác nhận cập nhật
             </button>
           </div>
-        </div>
+        </form>
       </div>
     );
   }

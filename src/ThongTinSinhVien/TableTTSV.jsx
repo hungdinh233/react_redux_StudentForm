@@ -3,8 +3,58 @@ import { connect } from "react-redux";
 
 class TableTTSV extends Component {
   renderThongTinSV = () => {
-    let { ttSinhVien } = this.props;
-    return ttSinhVien.map((sinhvien, index) => {
+    let { ttSinhVien, searchList } = this.props;
+    if (!searchList.length) {
+      console.log("arsv", ttSinhVien);
+      return ttSinhVien.map((sinhvien, index) => {
+        return (
+          <tr className="text-center" key={index}>
+            <td>{sinhvien.maSV}</td>
+            <td>{sinhvien.tenSV}</td>
+            <td>{sinhvien.soDienThoai}</td>
+            <td>{sinhvien.email}</td>
+            <td>
+              <button
+                className="btn btn-danger mx-2"
+                onClick={() => {
+                  const action = {
+                    type: "HANDLE_DELETE",
+                    payload: {
+                      sinhvien: sinhvien,
+                      masinhvien: sinhvien.maSV,
+                    },
+                  };
+                  this.props.dispatch(action);
+                }}
+              >
+                Xóa
+              </button>
+              <button
+                className="btn btn-primary"
+                onClick={() => {
+                  //disable để không sửa được mã sinh viên
+                  document.getElementById("maSV").disabled = true;
+                  document.getElementById("create_btn").style.display = "none";
+                  document.getElementById("update_btn").style.display = "block";
+                  const action = {
+                    type: "HANDLE_UPDATE_RENDER",
+                    payload: {
+                      sinhvien: sinhvien,
+                      masinhvien: sinhvien.maSV,
+                    },
+                  };
+                  this.props.dispatch(action);
+                }}
+              >
+                Sửa
+              </button>
+            </td>
+          </tr>
+        );
+      });
+    }
+    console.log("searchlist nè tml", searchList);
+    return searchList.map((sinhvien, index) => {
       return (
         <tr className="text-center" key={index}>
           <td>{sinhvien.maSV}</td>
@@ -75,6 +125,7 @@ class TableTTSV extends Component {
 
 const mapStateToProps = (state) => ({
   ttSinhVien: state.ttSinhVienReducer.danhSachSinhVien,
+  searchList: state.ttSinhVienReducer.searchList,
 });
 
 export default connect(mapStateToProps)(TableTTSV);

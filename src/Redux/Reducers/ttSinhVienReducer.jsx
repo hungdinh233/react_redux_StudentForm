@@ -26,6 +26,7 @@ const defaultState = {
     soDienThoai: "",
     email: "",
   },
+  searchList: [],
 };
 
 export const ttSinhVienReducer = (state = defaultState, action) => {
@@ -36,7 +37,7 @@ export const ttSinhVienReducer = (state = defaultState, action) => {
       let inpSinhVien = { ...state.sinhVien };
       inpSinhVien[id] = value;
       state.sinhVien = inpSinhVien;
-    //   console.log("asdsd", state.sinhVien);
+      //   console.log("asdsd", state.sinhVien);
       //------Thông báo tính đầy đủ khi điền Input------
       let validError = { ...state.validErr };
       let errMess = "";
@@ -99,6 +100,15 @@ export const ttSinhVienReducer = (state = defaultState, action) => {
           //   break;
         }
       }
+      // chặn việc điền xong bấm gửi tiếp tạo thành nhiều sinh viên cùng thông tin
+      let sinhVienTrung = state.danhSachSinhVien.find(
+        (sv) => sv.maSV === state.sinhVien.maSV
+      );
+      console.log("svtrung", sinhVienTrung);
+      if (sinhVienTrung) {
+        valid = false;
+        baoLoi.maSV = "Sinh viên này đã được thêm trước đây!";
+      }
       //chặn submit khi trạng thái false xuất hiện
       if (!valid) {
         console.log("err", baoLoi);
@@ -140,9 +150,22 @@ export const ttSinhVienReducer = (state = defaultState, action) => {
       //   console.log("svcn", svIndex);
       updateDanhSachSV[svIndex] = state.sinhVien;
       state.danhSachSinhVien = updateDanhSachSV;
-      alert ("Cập nhật thành công!")
+      alert("Cập nhật thành công!");
+      state.sinhVien = {
+        maSV: "",
+        tenSV: "",
+        email: "",
+        soDienThoai: "",
+      };
       return { ...state };
     }
+    case "HANDLE_SEARCH": {
+      let { searchedArr } = action.payload;
+      state.searchList.push(searchedArr);
+      console.log("searchlist", state.searchList);
+      return { ...state };
+    }
+
     default:
       return state;
   }
