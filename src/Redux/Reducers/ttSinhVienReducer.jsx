@@ -27,6 +27,7 @@ const defaultState = {
     email: "",
   },
   searchList: [],
+  searchInp: "", /*mình tạo thằng searchInp này để làm ra thông báo khi search không có kết quả sẽ hiển thị thông báo trên table; searchInp sẽ được đẩy ra component table*/
 };
 
 export const ttSinhVienReducer = (state = defaultState, action) => {
@@ -133,6 +134,9 @@ export const ttSinhVienReducer = (state = defaultState, action) => {
       );
       danhSachSinhVienUpdate.splice(sinhVienIndex, 1);
       state.danhSachSinhVien = danhSachSinhVienUpdate;
+      state.searchList =
+        ""; /*gán state.searchlist bằng rỗng để thằng table render về lại danh sách sinh viên đang có*/
+      alert("Xóa sinh viên này thành công");
       return { ...state };
     }
     case "HANDLE_UPDATE_RENDER": {
@@ -160,9 +164,19 @@ export const ttSinhVienReducer = (state = defaultState, action) => {
       return { ...state };
     }
     case "HANDLE_SEARCH": {
-      let { searchedArr } = action.payload;
-      state.searchList.push(searchedArr);
-      console.log("searchlist", state.searchList);
+      let { value } = action.payload;
+      state.searchInp = value;
+      console.log("......", state.searchInp)
+      let searchValue = value.trim().toLowerCase();
+      let searchArr = [...state.danhSachSinhVien];
+      let SearchArrFilter = searchArr.filter(
+        (sv) =>
+          sv.tenSV.toLocaleLowerCase().includes(searchValue) ||
+          sv.maSV.includes(searchValue) ||
+          sv.email.toLowerCase().includes(searchValue) ||
+          sv.soDienThoai.includes(searchValue)
+      );
+      state.searchList = SearchArrFilter;
       return { ...state };
     }
 

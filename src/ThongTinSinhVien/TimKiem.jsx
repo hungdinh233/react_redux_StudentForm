@@ -2,17 +2,17 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 
 class TimKiem extends Component {
+
   searchFunction = (e) => {
     let { value } = e.target;
-    let inpSearch = value.trim().toLowerCase()
-    let {danhSach} = this.props;
-    console.log(danhSach)
-    let searchedArr = danhSach.filter(sv => sv.tenSV.toLowerCase().includes(inpSearch) || sv.maSV.includes(inpSearch)||sv.email.toLowerCase().includes(inpSearch) ||sv.soDienThoai.includes(inpSearch) );
-    console.log(searchedArr);
+    if (value === ""){
+      value = ""
+    }
+
     const action = {
       type: "HANDLE_SEARCH",
       payload: {
-        searchedArr: searchedArr
+        value: value
       },
     };
     this.props.dispatch(action);
